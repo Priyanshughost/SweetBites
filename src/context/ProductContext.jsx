@@ -9,21 +9,25 @@ export function ProductProvider({ children }) {
   const [uploading, setUploading] = useState(false)
 
   function deleteProduct(id) {
-    setUploading(true)
-    axios.post(
-      `${import.meta.env.VITE_BACKEND_URL}/admin/deleteProduct/${id}`,
-      { withCredentials: true }
-    ).then(res => {
+  setUploading(true);
+
+  axios.post(
+    `${import.meta.env.VITE_BACKEND_URL}/admin/deleteProduct/${id}`,
+    {},                                      // empty body
+    { withCredentials: true }               // config (cookies)
+  )
+    .then(res => {
       toast.success(res.data?.message);
       if (res.data?.success) {
         setProducts(prev => prev.filter(p => p._id !== id));
       }
-      setUploading(false)
-    }).catch(err => {
-      toast.error(err.response?.data?.message || "Failed to delete product");
-      setUploading(false)
     })
-  }
+    .catch(err => {
+      toast.error(err.response?.data?.message || "Failed to delete product");
+    })
+    .finally(() => setUploading(false));
+}
+
 
 
   return (
@@ -36,3 +40,4 @@ export function ProductProvider({ children }) {
 export function useProducts() {
   return useContext(ProductContext);
 }
+
