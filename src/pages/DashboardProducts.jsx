@@ -49,49 +49,69 @@ export default function DashboardProducts() {
     }
 
     function handleSubmit() {
-        setUploading(true)
-        setNewProduct({ name: "", image: "", file: null, price: "", category: "" })
-        setNewOpen(prev => !prev)
-        axios.post(`${import.meta.env.VITE_BACKEND_URL}/admin/upload`, formdata, { withCredentials: true })
-            .then(res => {
-                setUploading(false)
-                console.log(res)
-                toast.success(res.data.message)
-                setProducts(prev => [...prev, res.data.product])
-            })
-            .catch(e => {
-                setUploading(false)
-                console.log(e)
-                toast.error(e.response.data.message || "Upload Failed")
-            })
+  if (!newProduct.name || !newProduct.price || !newProduct.category || !newProduct.file) {
+    toast.error("All fields are required");
+    return;
+  }
 
+  const form = new FormData();
+  form.append("name", newProduct.name);
+  form.append("price", newProduct.price);
+  form.append("category", newProduct.category);
+  form.append("file", newProduct.file);
 
-    }
+  setUploading(true);
+
+  axios.post(
+    `${import.meta.env.VITE_BACKEND_URL}/admin/upload`,
+    form,
+    { withCredentials: true }
+  )
+    .then(res => {
+      toast.success(res.data.message);
+      setProducts(prev => [...prev, res.data.product]);
+      setNewProduct({ name: "", price: "", category: "", image: "", file: null });
+      setNewOpen(false);
+    })
+    .catch(e => {
+      toast.error(e.response?.data?.message || "Upload Failed");
+    })
+    .finally(() => setUploading(false));
+}
+
 
     function editProduct() {
-        setUploading(true)
-        const form = new FormData();
-        form.append("name", editData.name);
-        form.append("price", editData.price);
-        form.append("category", editData.category);
+  if (!editData._id) return;
 
-        if (editData._file) {
-            form.append("file", editData._file);
-        }
+  const form = new FormData();
+  form.append("name", editData.name);
+  form.append("price", editData.price);
+  form.append("category", editData.category);
 
-        axios.post(`${import.meta.env.VITE_BACKEND_URL}/admin/updateProduct/${editData._id}`, form, { withCredentials: true })
-            .then((res) => {
-                // console.log(res.data)
-                setProducts(prev => prev.map(p => p._id === editData._id ? res.data?.prod : p))
-                toast.success(res.data?.message)
-                setEditOpen(false);
-                setUploading(false)
-            })
-            .catch((e) => {
-                toast.error(e.response?.data?.message || "Update failed");
-                setUploading(false)
-            })
-    }
+  if (editData._file) {
+    form.append("file", editData._file);
+  }
+
+  setUploading(true);
+
+  axios.post(
+    `${import.meta.env.VITE_BACKEND_URL}/admin/updateProduct/${editData._id}`,
+    form,
+    { withCredentials: true }
+  )
+    .then(res => {
+      setProducts(prev =>
+        prev.map(p => (p._id === editData._id ? res.data?.prod : p))
+      );
+      toast.success(res.data?.message);
+      setEditOpen(false);
+    })
+    .catch(e => {
+      toast.error(e.response?.data?.message || "Update failed");
+    })
+    .finally(() => setUploading(false));
+}
+
 
 
     function getAllProducts() {
@@ -320,3 +340,4 @@ export default function DashboardProducts() {
         </div>
     );
 }
+
