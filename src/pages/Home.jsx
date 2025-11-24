@@ -25,7 +25,7 @@ export default function Home() {
     );
     const [products, setProducts] = useState([])
     function getProducts() {
-        axios.get(`${import.meta.env.VITE_BACKEND_URL}/user/getProducts`)
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/user/getProducts`, {}, {withCredentials:true})
             .then((res) => {
                 setProducts(res.data.products)
             })
@@ -90,7 +90,7 @@ export default function Home() {
                         <CarouselContent>
                             {products.map((product) => (
                                 <CarouselItem
-                                    key={product._id}
+                                    key={product?._id}
                                     className="basis-full sm:basis-1/2 lg:basis-1/3"
                                 >
                                     {/* <div className="p-2"> */}
@@ -155,3 +155,4 @@ export default function Home() {
         </>
     );
 }
+
