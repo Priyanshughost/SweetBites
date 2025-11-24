@@ -33,7 +33,7 @@ export default function Cart() {
 
 
     useEffect(() => {
-        if (!cart.length) {
+        if (!cart?.length) {
             getCart()
         }
     }, [])
@@ -116,3 +116,4 @@ export default function Cart() {
         </div>
     );
 }
+
