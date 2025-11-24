@@ -21,17 +21,17 @@ export default function ProductCard({ product }) {
         >
           <CardHeader className="p-4">
             <CardTitle className="text-lg font-medium text-stone-900">
-              {product.name}
+              {product?.name}
             </CardTitle>
             <p className="text-stone-700 text-base font-medium">
-              ₹{product.price}
+              ₹{product?.price}
             </p>
           </CardHeader>
 
           <div className="overflow-hidden">
             <img
-              src={product.imageUrl}
-              alt={product.name}
+              src={product?.imageUrl}
+              alt={product?.name}
               className="w-full h-56 object-cover group-hover:scale-105 transition-transform"
             />
           </div>
@@ -52,12 +52,12 @@ export default function ProductCard({ product }) {
 
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="text-2xl font-semibold">{product.name}</DialogTitle>
+          <DialogTitle className="text-2xl font-semibold">{product?.name}</DialogTitle>
         </DialogHeader>
 
         <img
-          src={product.imageUrl}
-          alt={product.name}
+          src={product?.imageUrl}
+          alt={product?.name}
           className="w-full h-56 rounded-md object-cover mb-4"
         />
 
@@ -69,7 +69,7 @@ export default function ProductCard({ product }) {
           className="w-full"
           onClick={() => {
             addToCart(product);
-            toast.success(`${product.name} added to cart`);
+            toast.success(`${product?.name} added to cart`);
           }}
         >
           Add
@@ -78,3 +78,4 @@ export default function ProductCard({ product }) {
     </Dialog>
   );
 }
+
