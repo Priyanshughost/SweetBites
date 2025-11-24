@@ -8,6 +8,9 @@ import { CartProvider } from './context/CartContext'
 import { SidebarProvider } from './components/ui/sidebar'
 import { UserProvider } from './context/UserContext'
 import { OrderProvider } from './context/OrderContext'
+import axios from "axios"
+
+axios.defaults.withCredentials = true;
 
 createRoot(document.getElementById('root')).render(
 
